@@ -1,0 +1,19 @@
+# Git
+.git
+.gitignore
+
+# Docker
+.docker
+
+# Python
+food_recipes/__pycache__/
+food_recipes/*/__pycache__/
+food_recipes/*/*/__pycache__/
+food_recipes/*/*/*/__pycache__/
+.env/
+.venv/
+venv/
+
+
+# Local PostgreSQL data
+data/
