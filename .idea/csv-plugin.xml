@@ -52,7 +52,35 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/nginx_server/Dockerfile">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/nginx_server/default.conf.tpl">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/nginx_server/run.sh">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/requirements.txt">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/sh_scripts/run_app.sh">
           <value>
             <Attribute>
               <option name="separator" value="," />

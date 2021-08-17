@@ -4,11 +4,13 @@ services:
   app:
     build:
       context: .
+    restart: always
     ports:
       - 8000:8000
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./app:/app
+      - ./static_data:/static
     environment:
       - DB_NAME=${DB_NAME}
       - DB_HOST=db
@@ -20,8 +22,21 @@ services:
 
   db:
     image: mysql:8.0
+    restart: always
+    volumes:
+      - ./mysql_data:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_ROOT_PASSWORD=${ROOT_PASS}
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_USER=${DB_USER}
+
+  nginx_server:
+    build: ./nginx_server
+    restart: always
+    ports:
+      - 80:8000
+    volumes:
+      - ./static_data:/web/static
+    depends_on:
+      - app
