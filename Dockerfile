@@ -2,6 +2,7 @@ FROM python:3.9-alpine3.13
 LABEL maintainer=" Aleksandar Petrovic aleksandar.petrovicvr@gmail.com"
 
 ENV PYTHONUNBUFFERED 1
+RUN mkdir /app
 
 COPY ./requirements.txt /requirements.txt
 COPY ./app /app
@@ -17,7 +18,13 @@ RUN python3 -m venv /myenv && \
     apk add --no-cache mariadb-dev && \
 
     /myenv/bin/pip install -r /requirements.txt && \
-    adduser --disabled-password --no-create-home app
+    adduser --disabled-password --no-create-home app && \
+    mkdir -p /static_data/static_data && \
+    mkdir -p /static_data/media && \
+    chown -R app:app /static_data && \
+    chmod -R 755 /static_data
+
+
 
 ENV PATH="/myenv/bin:$PATH"
 
