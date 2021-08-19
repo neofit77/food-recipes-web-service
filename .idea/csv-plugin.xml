@@ -87,10 +87,24 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/app/User/templates/User/loged.html">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/app/User/templates/User/login.html">
           <value>
             <Attribute>
               <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/app/User/templates/User/logout.html">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
             </Attribute>
           </value>
         </entry>

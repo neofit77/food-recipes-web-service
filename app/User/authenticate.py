@@ -12,8 +12,8 @@ def enforce_csrf(request):
     if reason:
         raise exceptions.PermissionDenied('CSRF Failed: %s' % reason)
 
-class CustomAuthentication(JWTAuthentication):
-    """Class for JWT authentication"""
+class MyAuthentication(JWTAuthentication):
+    """Midleware class for Jvalidation JWT token"""
 
     def authenticate(self, request):
         """Function for JWT authentication if token exist function them validate,
@@ -22,12 +22,12 @@ class CustomAuthentication(JWTAuthentication):
         header = self.get_header(request)
 
         if header is None:
-            raw_token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE']) or None
+            token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE']) or None
         else:
-            raw_token = self.get_raw_token(header)
-        if raw_token is None:
+            token = self.get_raw_token(header)
+        if token is None:
             return None
-        raw_token2 = raw_token.split('proba-proba')[0]
-        validated_token = self.get_validated_token(raw_token2)
+        raw_token = token.split('StringKojiRazdvajaDveVrsteTokenaSplitomVracamVrednosti')[0]
+        validated_token = self.get_validated_token(raw_token)
         enforce_csrf(request)
         return self.get_user(validated_token), validated_token
