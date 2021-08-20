@@ -10,7 +10,8 @@ from rest_framework import generics, status, views, permissions
 from rest_framework.authentication import BasicAuthentication
 from django.http import HttpResponseRedirect
 from .forms import RegistrationForm
-from .validate_mail import verified
+from .validate_mail import verified, additional_data
+from .forms import User
 
 
 class RegisterView(APIView):
@@ -37,6 +38,17 @@ class RegisterView(APIView):
                 raise ValueError('Email not valid')
 
             serializer.save()
+
+            user = User.objects.last()
+            add_data = additional_data(user.email)
+            user.city = add_data['person']['geo']['city']
+            user.company_domain = add_data['company']['domain']
+            user.company_name = add_data['company']['name']
+            user.save()
+
+
+
+
             user_data = serializer.data
 
             return HttpResponseRedirect('/')

@@ -30,6 +30,8 @@ services:
       - MYSQL_ROOT_PASSWORD=${ROOT_PASS}
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_USER=${DB_USER}
+      - HUNTER_KEY=${HUNTER_KEY}
+      - CLEARBIT_KEY=${CLEARBIT_KEY}
 
   nginx_server:
     build: ./nginx_server

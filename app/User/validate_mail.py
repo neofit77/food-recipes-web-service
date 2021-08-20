@@ -2,8 +2,8 @@ import os
 import requests
 import clearbit
 
-clearbit.key = os.environ.get('clearbit_key')
-hunter_key = os.environ.get('hunter_key')
+clearbit.key = os.environ.get('CLEARBIT_KEY')
+hunter_key = os.environ.get('HUNTER_KEY')
 
 def verified(email):
     api_key = hunter_key
@@ -15,3 +15,4 @@ def verified(email):
 def additional_data(email):
     res = clearbit.Enrichment.find(email='alex@clearbit.com', stream=True)
     return res
+
