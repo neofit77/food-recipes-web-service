@@ -3,6 +3,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from .models import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
+from django.contrib.auth.hashers import make_password
 
 class LoginSerializer(serializers.ModelSerializer):
     password = serializers.CharField()
@@ -30,13 +31,36 @@ class LoginSerializer(serializers.ModelSerializer):
         }
 
 
-class RegisterSelializer(serializers.ModelSerializer):
-
-    def validate(self, attrs):
-        password = attrs['password']
-        first_name = attrs['first_name']
-
+class RegisterSerializer(serializers.ModelSerializer):
+    """Registration serializer"""
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
+        fields = ['username', 'password', 'first_name', 'last_name', 'email']
+
+    def validate(self, attrs):
+        password = attrs.get('password', '')
+        first_name = attrs.get('first_name', '')
+        last_name = attrs.get('last_name', '')
+        username = attrs.get('username', '')
+        email = attrs.get('email', '')
+
+        if not username:
+            raise serializers.ValidationError('Username must not be empty')
+        if not password:
+            raise serializers.ValidationError('Password must not be empty')
+        if not first_name:
+            raise serializers.ValidationError('First name must not be empty')
+        if not last_name:
+            raise serializers.ValidationError('Last name must not be empty')
+
+        return {
+            'password':make_password(password),
+            'first_name': first_name,
+            'last_name': last_name,
+            'username': username,
+            'email': email
+        }
+
+
+

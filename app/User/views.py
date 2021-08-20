@@ -11,9 +11,39 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializer import LoginSerializer
+from .serializer import LoginSerializer, RegisterSerializer
 from rest_framework import generics, status, views, permissions
 from rest_framework.authentication import BasicAuthentication
+from django.http import HttpResponseRedirect
+from .forms import RegistrationForm
+
+
+
+class RegisterView(APIView):
+    """Register view"""
+    serializer_class = RegisterSerializer
+    authentication_classes = [BasicAuthentication]
+
+    def get(self, request):
+        form = RegistrationForm()
+        return render(request, 'User/registerForm.html', {'form': form})
+
+    def post(self, request):
+        form = RegistrationForm(request.POST)
+        if request.POST['password'] != request.POST['password2']:
+            return Response('Your paswwords must match',status=status.HTTP_417_EXPECTATION_FAILED)
+        form.clean()
+        if form.is_valid():
+            user = request.data
+            print(user)
+            serializer = self.serializer_class(data=user)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            user_data = serializer.data
+
+            return HttpResponseRedirect('/')
+
+        return render(request, 'User/registerForm.html', {'form': form})
 
 
 class LogForm(APIView):
@@ -22,6 +52,7 @@ class LogForm(APIView):
 
     def get(self, request):
         return render(request, 'User/login.html')
+
 
 
 class LogUser(APIView):
@@ -34,28 +65,33 @@ class LogUser(APIView):
     def post(self, request):
         """Function that create access and refresh tokens and store it in httpOnly cookies"""
         user = authenticate(username=request.data['username'],password=request.data['password'])
-        tokens = user.tokens()
-        data = {}
-        data['refresh'] = tokens['refresh']
-        data['access'] = tokens['access']
-        data['username'] = request.data['username']
-        data['password'] = request.data['password']
-        data['csrfmiddlewaretoken'] = request.data['csrfmiddlewaretoken']
+        if user:
+            tokens = user.tokens()
+            data = {}
+            data['refresh'] = tokens['refresh']
+            data['access'] = tokens['access']
+            data['username'] = request.data['username']
+            data['password'] = request.data['password']
+            data['csrfmiddlewaretoken'] = request.data['csrfmiddlewaretoken']
 
-        serializer = self.serializer_class(data=data)
-        serializer.is_valid(raise_exception=True)
-        response = Response()
-        response.set_cookie(
-            key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-            value='{}StringKojiRazdvajaDveVrsteTokenaSplitomVracamVrednosti{}'.format(data["access"], data["refresh"]),
-            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
-            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
-            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
-            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
-        )
-        csrf.get_token(request)
-        response.data = {"Success": "Login successfully", "data": data}
-        return response
+            serializer = self.serializer_class(data=data)
+            serializer.is_valid(raise_exception=True)
+            response = Response()
+            response.set_cookie(
+                key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+                value='{}StringKojiRazdvajaDveVrsteTokenaSplitomVracamVrednosti{}'.format(data["access"], data["refresh"]),
+                expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+                httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+                secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
+            )
+            csrf.get_token(request)
+            response.data = {"Success": "Login successfully", "data": data}
+            return response
+
+        else:
+            return render(request, 'User/login.html', {'message': 'Your credentials not valid, try again'})
+
 
 
 class LogoutAPIView(generics.GenericAPIView):

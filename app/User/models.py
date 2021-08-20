@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from django.contrib.auth.hashers import make_password
 
 class UserManager(BaseUserManager):
     """Overide default methods for django User model"""
@@ -13,7 +13,8 @@ class UserManager(BaseUserManager):
             raise TypeError('Users should have a username')
 
         user = self.model(username=username, email=self.normalize_email(email))
-        user.set_password(password)
+
+        user.set_password(make_password(password))
         user.save()
         return user
 
@@ -37,6 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=40)
     company_name = models.CharField(max_length=100, default='')
     company_domain = models.CharField(max_length=50, default='')
+    city = models.CharField(max_length=60, default='')
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)

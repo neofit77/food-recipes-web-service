@@ -131,4 +131,4 @@ dmypy.json
 
 # Volumes
  static_data/
- ./mysql_data1
+ mysql_data1/

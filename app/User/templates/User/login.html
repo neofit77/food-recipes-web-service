@@ -3,11 +3,11 @@
 {%block main%}
 
 
-    {% if form.errors %}
-        <p style="color:red;padding-top:30px">Your username and password didn't match. Please try again.</p>
+    {% if message %}
+        <p style="color:red;padding-top:30px">{{message}}</p>
     {% endif %}
         <!-- Login Form -->
-    <form method="POST" action="auth/" style="padding-top:50px">
+    <form method="POST" action="{%url 'auth'%}" style="padding-top:50px">
         {%csrf_token%}
       <input type="text" id="login" name="username" placeholder="username">
       <input type="text" id="password" name="password" placeholder="password">
