@@ -27,7 +27,7 @@ class MyAuthentication(JWTAuthentication):
             token = self.get_raw_token(header)
         if token is None:
             return None
-        raw_token = token.split('StringKojiRazdvajaDveVrsteTokenaSplitomVracamVrednosti')[0]
+        raw_token = token
         validated_token = self.get_validated_token(raw_token)
         enforce_csrf(request)
         return self.get_user(validated_token), validated_token

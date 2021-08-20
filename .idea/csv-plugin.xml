@@ -38,6 +38,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/app/Recipe/forms.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/app/Recipe/models.py">
           <value>
             <Attribute>
@@ -46,6 +53,13 @@
           </value>
         </entry>
         <entry key="/app/Recipe/templates/Recipe/base.html">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/app/Recipe/templates/Recipe/create_recipe.html">
           <value>
             <Attribute>
               <option name="separator" value="," />

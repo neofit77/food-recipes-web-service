@@ -63,7 +63,7 @@ class LogUser(APIView):
     template_name='User/loged.html'
 
     def post(self, request):
-        """Function that create access and refresh tokens and store it in httpOnly cookies"""
+        """Function that create access and refresh tokens and store access in httpOnly cookies"""
         user = authenticate(username=request.data['username'],password=request.data['password'])
         if user:
             tokens = user.tokens()
@@ -79,7 +79,7 @@ class LogUser(APIView):
             response = Response()
             response.set_cookie(
                 key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-                value='{}StringKojiRazdvajaDveVrsteTokenaSplitomVracamVrednosti{}'.format(data["access"], data["refresh"]),
+                value=data["access"],
                 expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
                 httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
                 secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
@@ -104,7 +104,7 @@ class LogoutAPIView(generics.GenericAPIView):
         response = Response()
         response.set_cookie(
             key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-            value='{}StringKojiRazdvajaDveVrsteTokenaSplitomVracamVrednosti{}'.format('ddd', 'fff'),
+            value='{}'.format('ddd'),
             expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
