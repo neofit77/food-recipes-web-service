@@ -2,8 +2,8 @@ import os
 import requests
 import clearbit
 
-clearbit.key = os.environ.get('CLEARBIT_KEY')
-hunter_key = os.environ.get('HUNTER_KEY')
+clearbit.key = 'ENTER YOUR API KEY HERE'
+hunter_key = 'ENTER YOUR API KEY HERE'
 
 def verified(email):
     api_key = hunter_key
