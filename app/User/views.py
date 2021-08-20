@@ -1,22 +1,16 @@
 from django.shortcuts import render
-from django.shortcuts import redirect
-from django.contrib.auth.views import LogoutView, LoginView
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.middleware import csrf
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from django.conf import settings
-from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
-from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializer import LoginSerializer, RegisterSerializer
 from rest_framework import generics, status, views, permissions
 from rest_framework.authentication import BasicAuthentication
 from django.http import HttpResponseRedirect
 from .forms import RegistrationForm
-
+from .validate_mail import verified
 
 
 class RegisterView(APIView):
@@ -32,12 +26,16 @@ class RegisterView(APIView):
         form = RegistrationForm(request.POST)
         if request.POST['password'] != request.POST['password2']:
             return Response('Your paswwords must match',status=status.HTTP_417_EXPECTATION_FAILED)
-        form.clean()
+
         if form.is_valid():
             user = request.data
-            print(user)
             serializer = self.serializer_class(data=user)
             serializer.is_valid(raise_exception=True)
+
+            # mail verification
+            if verified(request.POST['email']) != 'valid':
+                raise ValueError('Email not valid')
+
             serializer.save()
             user_data = serializer.data
 

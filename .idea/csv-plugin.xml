@@ -150,6 +150,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/app/User/validate_mail.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/app/User/views.py">
           <value>
             <Attribute>
