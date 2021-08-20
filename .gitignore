@@ -129,6 +129,3 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Volumes
- static_data/
- mysql_data1/
